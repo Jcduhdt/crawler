@@ -20,7 +20,7 @@ import java.util.Set;
  */
 public class JsoupFirstTest {
     @Test
-    public void testUrl() throws Exception{
+    public void testUrl() throws Exception {
         //解析url地址，第一个参数是访问的url，第二个参数是设置的超时时间
         Document doc = Jsoup.parse(new URL("http://www.itcast.cn"), 1000);
         //使用标签选择器，获取第一个title标签中的内容
@@ -28,11 +28,11 @@ public class JsoupFirstTest {
         //打印
         System.out.println("title = " + title.text());
     }
-    
+
     @Test
-    public void testString() throws Exception{
+    public void testString() throws Exception {
         //使用工具类读取文件，获取字符串
-        String content = FileUtils.readFileToString(new File("D:\\Java\\JavaProject\\crawler\\src\\main\\java\\test.html"),"utf-8");
+        String content = FileUtils.readFileToString(new File("D:\\Java\\JavaProject\\crawler\\src\\main\\java\\test.html"), "utf-8");
         //解析字符串
         Document doc = Jsoup.parse(content);
         Element title = doc.getElementsByTag("title").first();
@@ -40,7 +40,7 @@ public class JsoupFirstTest {
     }
 
     @Test
-    public void testFile() throws Exception{
+    public void testFile() throws Exception {
         //解析文件
         Document doc = Jsoup.parse(new File("D:\\Java\\JavaProject\\crawler\\src\\main\\java\\test.html"), "utf-8");
         Element title = doc.getElementsByTag("title").first();
@@ -48,7 +48,7 @@ public class JsoupFirstTest {
     }
 
     @Test
-    public void testDOM() throws Exception{
+    public void testDOM() throws Exception {
         //解析文件，获取Document文件
         Document doc = Jsoup.parse(new File("D:\\Java\\JavaProject\\crawler\\src\\main\\java\\test.html"), "utf-8");
         //获取元素
@@ -66,7 +66,7 @@ public class JsoupFirstTest {
     }
 
     @Test
-    public void testData() throws Exception{
+    public void testData() throws Exception {
         //解析文件，获取Document文件
         Document doc = Jsoup.parse(new File("D:\\Java\\JavaProject\\crawler\\src\\main\\java\\test.html"), "utf-8");
         //根据id获取元素
@@ -89,5 +89,55 @@ public class JsoupFirstTest {
         str = element.text();
 
         System.out.println("获取到的数据时： " + str);
+    }
+
+    @Test
+    public void testSelector() throws Exception {
+        //解析html文件，获取Document对象
+        Document doc = Jsoup.parse(new File("D:\\Java\\JavaProject\\crawler\\src\\main\\java\\test.html"), "utf-8");
+        //tagname:通过标签查找元素，比如span
+        /*Elements elements = doc.select("span");
+        for (Element element : elements) {
+            System.out.println("element= " + element.text());
+        }*/
+        //#id: 通过ID查找元素，比如：# city_bj
+//        Element element = doc.select("#city_bj").first();
+        //.class: 通过class名称查找元素，比如：.class_a
+//        Element element = doc.select(".class_a").first();
+        //[attribute]: 利用属性查找元素，比如：[abc]
+        Element element = doc.select("[abc]").first();
+        //[attr=value]: 利用属性值来查找元素，比如：[class=s_name]
+        Elements elements = doc.select("[class=s_name]");
+        for (Element e : elements) {
+            System.out.println("element = " + e.text());
+        }
+        System.out.println("获取到的结果是：" + element.text());
+    }
+
+    @Test
+    public void testSelector2() throws Exception {
+        //解析html文件，获取Document对象
+        Document doc = Jsoup.parse(new File("D:\\Java\\JavaProject\\crawler\\src\\main\\java\\test.html"), "utf-8");
+        //el#id: 元素+ID，比如： h3#city_bj
+        Element element = doc.select("h3#city_bj").first();
+        //el.class: 元素+class，比如： li.class_a
+        element = doc.select("li.class_a").first();
+        //el[attr]: 元素+属性名，比如： span[abc]
+        element = doc.select("span[abc]").first();
+        //任意组合: 比如：span[abc].s_name
+        element = doc.select("span[abc].s_name").first();
+        //ancestor child: 查找某个元素下子元素，比如：.city_con li 查找"city_con"下的所有li
+        Elements elements = doc.select(".city_con li");
+        //parent > child: 查找某个父元素下的直接子元素，比如：
+        // .city_con > ul > li 查找city_con第一级（直接子元素）的ul，再找所有ul下的第一级li
+        elements = doc.select(".city_con > ul > li");
+        //parent > *: 查找某个父元素下所有直接子元素
+        elements = doc.select(".city_con>ul>*");
+
+        System.out.println("找到的元素是：" + element.text());
+
+        for (Element e : elements) {
+            System.out.println("遍历得结果：" + e.text());
+        }
     }
 }
